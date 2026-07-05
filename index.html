@@ -35,12 +35,34 @@
       <a href="#">wip!!!</a><br>
     </td>
 
-    <div style="border:1px solid black; padding:10px; margin:10px 0;">
+    <div id="status-box" style="border:1px solid black; padding:10px;">
       <b>status</b><br>
-      wip<br>
-      wip<br>
-      WORK IN PROGRESS<br>
+      loading loading loading
     </div>
+    
+    <script>
+    async function loadStatus() {
+      const res = await fetch("https://api.lanyard.rest/v1/users/1227759305852190801"); // lanyard api
+      const data = await res.json();
+      const d = data.data;
+      const statusMap = {
+        online: "online",
+        idle: "idle",
+        dnd: "do not disturb",
+        offline: "offline"
+      };
+      document.getElementById("status-box").innerHTML = `
+        <b>status</b><br>
+        discord: ${statusMap[d.discord_status] || "unknown"}<br>
+        activity: ${d.activities?.[0]?.name || "nothing"}<br> 
+      `; // TODO: add spotify stuff and also pfp
+    }
+    
+    loadStatus();
+    setInterval(loadStatus, 15000);
+    </script>
+
+    <!-- TODO: add status.cafe and other stuff in the status (not just discord) -->
 
     <td valign="top">
       <b>notes</b>
